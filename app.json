@@ -55,7 +55,12 @@
           "locationWhenInUsePermission": "Loom uses your location to show you compatible people nearby."
         }
       ],
-      "@stripe/stripe-react-native"
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.loom.app"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

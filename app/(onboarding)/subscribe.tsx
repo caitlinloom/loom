@@ -76,6 +76,22 @@ export default function SubscribeScreen() {
     }
   };
 
+  // DEV ONLY — skip Stripe and advance directly to profile step
+  const handleDevSkip = async () => {
+    if (!user) return;
+    setLoading(true);
+    try {
+      await db.profiles()
+        .update({ onboarding_step: 1, updated_at: new Date().toISOString() })
+        .eq('id', user.id);
+      await refreshProfile();
+      router.replace('/(onboarding)/profile');
+    } catch (err: any) {
+      Alert.alert('Error', err.message);
+      setLoading(false);
+    }
+  };
+
   return (
     <View style={s.container}>
       <StatusBar style="dark" />
@@ -116,6 +132,9 @@ export default function SubscribeScreen() {
         <Text style={s.footerNote}>
           Billed monthly. Cancel anytime in your account settings.
         </Text>
+        <Btn onPress={handleDevSkip} disabled={loading}>
+          Skip (dev mode)
+        </Btn>
       </View>
     </View>
   );
